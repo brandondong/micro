@@ -3,6 +3,7 @@ package clipboard
 import (
 	"errors"
 	"log"
+	"os/exec"
 	"time"
 
 	"github.com/zyedidia/clipper"
@@ -54,6 +55,16 @@ func Initialize(m Method) error {
 		}
 		clipboard, err = GetClipboard(clips...)
 		log.Printf("Final type: %T\n", clipboard)
+
+		start := time.Now()
+		if _, err := exec.LookPath("noexist2"); err != nil {
+			elapsed := time.Since(start)
+			log.Println("Time for exec.LookPath: ", elapsed)
+		}
+		if _, err := exec.LookPath("noexist3"); err != nil {
+			elapsed := time.Since(start)
+			log.Println("Time for exec.LookPath: ", elapsed)
+		}
 	}
 	if err != nil {
 		CurrentMethod = Internal
