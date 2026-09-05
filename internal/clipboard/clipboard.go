@@ -3,6 +3,7 @@ package clipboard
 import (
 	"errors"
 	"log"
+	"time"
 
 	"github.com/zyedidia/clipper"
 )
@@ -51,13 +52,28 @@ func Initialize(m Method) error {
 		for _, clip := range clips {
 			log.Printf("Type: %T\n", clip)
 		}
-		clipboard, err = clipper.GetClipboard(clips...)
+		clipboard, err = GetClipboard(clips...)
 		log.Printf("Final type: %T\n", clipboard)
 	}
 	if err != nil {
 		CurrentMethod = Internal
 	}
 	return err
+}
+
+func GetClipboard(clips ...clipper.Clipboard) (clip clipper.Clipboard, err error) {
+	for _, clip := range clips {
+		log.Printf("Type init: %T\n", clip)
+		start := time.Now()
+		if err = clip.Init(); err == nil {
+			elapsed := time.Since(start)
+			log.Println("Time to init succeed: ", elapsed)
+			return clip, nil
+		}
+		elapsed := time.Since(start)
+		log.Println("Time to init fail: ", elapsed)
+	}
+	return nil, nil
 }
 
 // SetMethod changes the clipboard access method
