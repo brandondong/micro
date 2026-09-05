@@ -498,8 +498,8 @@ func main() {
 	}
 
 	elapsed := time.Since(start)
-	log.Fatal("Time until DrawChan wait: ", drawChanElapsed)
-	log.Fatal("Time until DoEvent loop: ", elapsed)
+	log.Println("Time until DrawChan wait: ", drawChanElapsed)
+	log.Println("Time until DoEvent loop: ", elapsed)
 
 	for {
 		DoEvent()
