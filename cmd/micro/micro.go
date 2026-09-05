@@ -370,7 +370,7 @@ func main() {
 	}
 
 	DoPluginFlags()
-
+	beforeScreenInitElapsed := time.Since(start)
 	err = screen.Init()
 	if err != nil {
 		fmt.Println(err)
@@ -406,6 +406,7 @@ func main() {
 		}
 	}()
 
+	beforeLoadPluginsElapsed := time.Since(start)
 	err = config.LoadAllPlugins()
 	if err != nil {
 		screen.TermMessage(err)
@@ -438,6 +439,7 @@ func main() {
 		runtime.Goexit()
 	}
 
+	beforeInitTabs := time.Since(start)
 	action.InitTabs(b)
 
 	err = config.RunPluginFn("init")
@@ -498,6 +500,9 @@ func main() {
 	}
 
 	elapsed := time.Since(start)
+	log.Println("Time before screen init: ", beforeScreenInitElapsed)
+	log.Println("Time before load plugins: ", beforeLoadPluginsElapsed)
+	log.Println("Time before init tabs: ", beforeInitTabs)
 	log.Println("Time until DrawChan wait: ", drawChanElapsed)
 	log.Println("Time until DoEvent loop: ", elapsed)
 
