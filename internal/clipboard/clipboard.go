@@ -2,6 +2,7 @@ package clipboard
 
 import (
 	"errors"
+	"log"
 
 	"github.com/zyedidia/clipper"
 )
@@ -47,7 +48,11 @@ func Initialize(m Method) error {
 			Name: "micro-clip",
 		})
 		clips = append(clips, clipper.Clipboards...)
+		for _, clip := range clips {
+			log.Printf("Type: %T\n", clip)
+		}
 		clipboard, err = clipper.GetClipboard(clips...)
+		log.Printf("Final type: %T\n", clipboard)
 	}
 	if err != nil {
 		CurrentMethod = Internal
