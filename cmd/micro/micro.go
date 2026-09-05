@@ -304,6 +304,7 @@ func exit(rc int) {
 }
 
 func main() {
+	start := time.Now()
 	defer func() {
 		if util.Stdout.Len() > 0 {
 			fmt.Fprint(os.Stdout, util.Stdout.String())
@@ -477,6 +478,7 @@ func main() {
 		}
 	}()
 
+	drawChanElapsed := time.Since(start)
 	// clear the drawchan so we don't redraw excessively
 	// if someone requested a redraw before we started displaying
 	for len(screen.DrawChan()) > 0 {
@@ -494,6 +496,10 @@ func main() {
 	for _, cmd := range flagExec {
 		action.MainTab().CurPane().HandleCommand(cmd)
 	}
+
+	elapsed := time.Since(start)
+	log.Fatal("Time until DrawChan wait: ", drawChanElapsed)
+	log.Fatal("Time until DoEvent loop: ", elapsed)
 
 	for {
 		DoEvent()
