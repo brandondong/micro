@@ -377,6 +377,7 @@ func main() {
 		fmt.Println("Fatal: Micro could not initialize a Screen.")
 		exit(1)
 	}
+	afterScreenInitElapsed := time.Since(start)
 
 	util.Sigterm = make(chan os.Signal, 1)
 	sighup = make(chan os.Signal, 1)
@@ -385,6 +386,7 @@ func main() {
 
 	m := clipboard.SetMethod(config.GetGlobalOption("clipboard").(string))
 	clipErr := clipboard.Initialize(m)
+	afterClipboardElapsed := time.Since(start)
 
 	defer func() {
 		if err := recover(); err != nil {
@@ -501,6 +503,8 @@ func main() {
 
 	elapsed := time.Since(start)
 	log.Println("Time before screen init: ", beforeScreenInitElapsed)
+	log.Println("Time after screen init: ", afterScreenInitElapsed)
+	log.Println("Time after clipboard init: ", afterClipboardElapsed)
 	log.Println("Time before load plugins: ", beforeLoadPluginsElapsed)
 	log.Println("Time before init tabs: ", beforeInitTabs)
 	log.Println("Time until DrawChan wait: ", drawChanElapsed)
