@@ -383,8 +383,10 @@ func main() {
 	sighup = make(chan os.Signal, 1)
 	signal.Notify(util.Sigterm, syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGABRT)
 	signal.Notify(sighup, syscall.SIGHUP)
+	afterSignalElapsed := time.Since(start)
 
 	m := clipboard.SetMethod(config.GetGlobalOption("clipboard").(string))
+	beforeClipboardElapsed := time.Since(start)
 	clipErr := clipboard.Initialize(m)
 	afterClipboardElapsed := time.Since(start)
 
@@ -504,6 +506,8 @@ func main() {
 	elapsed := time.Since(start)
 	log.Println("Time before screen init: ", beforeScreenInitElapsed)
 	log.Println("Time after screen init: ", afterScreenInitElapsed)
+	log.Println("Time afterSignalElapsed init: ", afterSignalElapsed)
+	log.Println("Time before clipboard init: ", beforeClipboardElapsed)
 	log.Println("Time after clipboard init: ", afterClipboardElapsed)
 	log.Println("Time before load plugins: ", beforeLoadPluginsElapsed)
 	log.Println("Time before init tabs: ", beforeInitTabs)
